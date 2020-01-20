@@ -5,4 +5,4 @@ ip-10-0-174-37.eu-west-1.compute.internal
 
 [all:vars]
 ansible_ssh_user=core
-ansible_ssh_private_key_file=/tmp/ssh_aws_instance/id_rsa
+ansible_ssh_private_key_file=/home/ec2-user/.ssh/id_rsa
