@@ -1,0 +1,13 @@
+galaxy_info:
+  author: Asier Cidon @RedHat
+  description: OCP4.11 ETCD restore backup
+  company: Red Hat
+  license: GPL-2.0-or-later
+  min_ansible_version: 2.8
+  platforms:
+  - name: Red Hat Enterprise Linux
+    versions:
+    - 8
+  galaxy_tags: []
+
+dependencies: []

@@ -1,0 +1,4 @@
+---
+# vars file for roles/ocp_etcd_restore
+
+backup_dst_file:  "/tmp/snapshot.db"

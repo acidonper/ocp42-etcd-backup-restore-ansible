@@ -1,0 +1,63 @@
+---
+# tasks file for roles/ocp_etcd_backup
+
+- name: "Fail when a mandatory required vars are not defined"
+  fail:
+    msg: "Required variables are not defined"
+  when: backup_src_path is not defined
+        or backup_dst_path is not defined
+        or backup_dst_file_latest is not defined
+
+- name: Generate snapshoot file name
+  shell: 'echo "$(date "+%Y%m%d%H%M%S")-snapshot.db"'
+  register: tmp_backup_file
+  changed_when: false
+
+- name: Define backup file name
+  set_fact:
+    backup_src_file: "{{ backup_src_path }}/{{ tmp_backup_file.stdout }}"
+    backup_dst_file: "{{ backup_dst_path }}/{{ tmp_backup_file.stdout }}"
+
+- name: Debug Source Machine (Master) -> Backup File
+  debug:
+    msg: "Source Machine (Master) -> Backup File: {{ backup_src_file }}"
+    verbosity: 1
+
+- name: Debug Destination Machine (Bastion) -> Backup File
+  debug:
+    msg: "Destination Machine (Bastion) -> Backup File: {{ backup_dst_file }} ; Latest File: {{ backup_dst_file_latest }}"
+    verbosity: 1
+
+- name: Perform ETCD backup
+  shell: "/usr/local/bin/etcd-snapshot-backup.sh {{ backup_src_file }}"
+  become: true
+
+- name: Fetch ETCD backup file
+  fetch:
+    src: "{{ backup_src_file }}"
+    dest: "{{ backup_dst_file }}"
+    flat: yes
+
+- name: Check backup file in destination
+  stat:
+    path: "{{ backup_dst_file }}"
+  register: st
+  connection: local
+
+- name: Check backup file is a regular file
+  fail:
+    msg: "Backup path {{ backup_dst_file }} is not a regular file"
+  when: st.stat.isreg != true or st.stat.isdir == true or st.stat.islnk == true
+
+- name: Create a symbolic link to latest backup
+  file:
+    src: "{{ backup_dst_file }}"
+    dest: "{{ backup_dst_file_latest }}"
+    state: link
+  connection: local
+  
+- name: Delete backup file
+  file:
+    path: "{{ backup_src_file }}"
+    state: absent
+  become: true

@@ -1,0 +1,52 @@
+---
+# tasks file for roles/ocp_etcd_restore
+
+- name: "Fail when a mandatory required vars are not defined"
+  fail:
+    msg: "Required variables are not defined"
+  when:
+    - backup_src_file is not defined
+    - backup_dst_file is not defined
+
+- name: Debug Source Machine (Bastion) -> Backup File
+  debug:
+    msg: "Source Machine (Bastion) -> Backup File: {{ backup_src_file }}"
+    verbosity: 1
+
+- name: Debug Destination Machine (Master) -> Backup File
+  debug:
+    msg: "Destination Machine (Master) -> Backup File: {{ backup_dst_file }}"
+    verbosity: 1
+
+- name: Copy ETCD backup file
+  copy:
+    src: "{{ backup_src_file }}"
+    dest: "{{ backup_dst_file }}"
+    force: yes
+
+- name: Obtain ETCD member
+  shell: id=$(sudo crictl ps --name etcd-member | awk 'FNR==2{ print $1}') && sudo crictl exec -it $id etcdctl --cacert="/etc/ssl/etcd/ca.crt" --cert="/etc/ssl/etcd/system:etcd-peer:etcd-0.crc.testing.crt" --key="/etc/ssl/etcd/system:etcd-peer:etcd-0.crc.testing.key" member list -w json
+  become: true
+  register: etcd_members_json
+
+- name: Debug etcd members list in JSON
+  debug:
+    var: etcd_members_json.stdout
+    verbosity: 1
+
+- name: Test with a message
+  etcd_members_parser:
+    json: "{{ etcd_members_json.stdout }}"
+  register: etcd_members_parsed
+
+- name: Debug etcd members list parsed by etcd_members_parser module
+  debug:
+    var: etcd_members_parsed
+    verbosity: 1
+
+- name: Restore ETCD backup
+  # shell: "/usr/local/bin/etcd-snapshot-restore.sh {{ backup_dst_file }} $INITIAL_CLUSTER"
+  shell: "echo $INITIAL_CLUSTER"
+  become: true
+  environment:
+    INITIAL_CLUSTER: "{{ etcd_members_parsed.message }}"

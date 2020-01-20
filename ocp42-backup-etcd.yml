@@ -1,50 +1,16 @@
 ##
-# Example: ansible-playbook -i inventory ocp42-backup-etcd.yml
+# Example: 
+# $ ansible-playbook -i inventory ocp42-backup-etcd.yml
+# $ ansible-playbook -i inventory ocp42-backup-etcd.yml --extra-vars="backup_dst_path=/tmp/openshift42_backup"
 ##
 
-- hosts: all
-  vars:
-    backup_dst_path: "/tmp/ocp42-crc"
-    backup_dst_file_latest:  "{{ backup_dst_path }}/latest-snapshot.db"
-    backup_src_path: "/tmp"
+- hosts: masters
+  gather_facts: false
   tasks:
-  
-    - name: Generate snapshoot file name
-      shell: 'echo "$(date "+%Y%m%d%H%M%S")-snapshot.db"'
-      register: tmp_backup_file
-      changed_when: false
 
-    - name: Define backup file name
-      set_fact:
-        backup_src_file: "{{ backup_src_path }}/{{ tmp_backup_file.stdout }}"
-        backup_dst_file: "{{ backup_dst_path }}/{{ tmp_backup_file.stdout }}"
-    
-    - debug:
-        msg: "Source Machine (Master) -> Backup File: {{ backup_src_file }}"
-        verbosity: 1
-
-    - debug:
-        msg: "Destination Machine (Bastion) -> Backup File: {{ backup_dst_file }} ; Latest File: {{ backup_dst_file_latest }}"
-        verbosity: 1
-
-    - name: Perform ETCD backup
-      shell: "/usr/local/bin/etcd-snapshot-backup.sh {{ backup_src_file }}"
-      become: true
-  
-    - name: Fetch ETCD backup file
-      fetch:
-        src: "{{ backup_src_file }}"
-        dest: "{{ backup_dst_file }}"
-
-    - name: Create a symbolic link to latest backup
-      file:
-        src: "{{ backup_dst_file }}"
-        dest: "{{ backup_dst_file_latest }}"
-        state: link
-      connection: local
-      
-    - name: Delete backup file
-      file:
-        path: "{{ backup_src_file }}"
-        state: absent
-      become: true
+    - name: Perform ETCD Backup
+      import_role: 
+        name: ocp_etcd_backup
+      vars:
+        backup_dst_path: "/tmp/ocp42-crc"
+      run_once: true

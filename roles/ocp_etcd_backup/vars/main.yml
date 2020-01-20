@@ -1,0 +1,5 @@
+---
+# vars file for roles/ocp_etcd_backup
+
+backup_dst_file_latest: "{{ backup_dst_path }}/latest-snapshot.db"
+backup_src_path: "/tmp"
