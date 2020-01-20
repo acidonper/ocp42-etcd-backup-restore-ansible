@@ -24,8 +24,31 @@
     dest: "{{ backup_dst_file }}"
     force: yes
 
+- name: Obtain ETCD member cert files names
+  shell: id=$(sudo crictl ps --name etcd-member | awk 'FNR==2{ print $1}') && sudo crictl exec -it $id ls -1 /etc/ssl/etcd
+  become: true
+  register: etcd_members_ssl_files
+
+- name: Obtain etcd member key
+  set_fact:
+    etcd_member_key: "{{ etcd_members_ssl_files.stdout_lines | list_patterns('peer') | list_patterns('key') }}"
+
+- name: Debug etcd member key file 
+  debug:
+    msg: "/etc/ssl/etcd/{{ etcd_member_key[0] }}"
+    verbosity: 1
+
+- name: Obtain etcd member crt
+  set_fact:
+    etcd_member_crt: "{{ etcd_members_ssl_files.stdout_lines | list_patterns('peer') | list_patterns('crt') }}"
+
+- name: Debug etcd member crt file 
+  debug:
+    msg: "/etc/ssl/etcd/{{ etcd_member_crt[0] }}"
+    verbosity: 1
+
 - name: Obtain ETCD member
-  shell: id=$(sudo crictl ps --name etcd-member | awk 'FNR==2{ print $1}') && sudo crictl exec -it $id etcdctl --cacert="/etc/ssl/etcd/ca.crt" --cert="/etc/ssl/etcd/system:etcd-peer:etcd-0.crc.testing.crt" --key="/etc/ssl/etcd/system:etcd-peer:etcd-0.crc.testing.key" member list -w json
+  shell: id=$(sudo crictl ps --name etcd-member | awk 'FNR==2{ print $1}') && sudo crictl exec -it $id etcdctl --cacert="/etc/ssl/etcd/ca.crt" --cert="/etc/ssl/etcd/{{ etcd_member_crt[0] }}" --key="/etc/ssl/etcd/{{ etcd_member_key[0] }}" member list -w json
   become: true
   register: etcd_members_json
 
