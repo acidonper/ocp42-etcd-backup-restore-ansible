@@ -68,8 +68,7 @@
     verbosity: 1
 
 - name: Restore ETCD backup
-  # shell: "/usr/local/bin/etcd-snapshot-restore.sh {{ backup_dst_file }} $INITIAL_CLUSTER"
-  shell: "echo $INITIAL_CLUSTER"
+  shell: "/usr/local/bin/etcd-snapshot-restore.sh {{ backup_dst_file }} $INITIAL_CLUSTER"
   become: true
   environment:
     INITIAL_CLUSTER: "{{ etcd_members_parsed.message }}"
