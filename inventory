@@ -3,6 +3,10 @@ master1 ansible_host=192.168.130.11
 master2 ansible_host=192.168.130.11
 master3 ansible_host=192.168.130.11
 
-[all:vars]
+[localhost]
+localhost ansible_host=localhost ansible_connection=local ansible_python_interpreter=/usr/bin/python
+
+[masters:vars]
 ansible_ssh_user=core
-ansible_ssh_private_key_file=/tmp/crc_id_rsa
+ansible_ssh_private_key_file=/etc/ocp/4.2.2/openshift_rsa
+ansible_python_interpreter=/usr/libexec/platform-python

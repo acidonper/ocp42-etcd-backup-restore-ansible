@@ -54,7 +54,7 @@
     src: "{{ backup_dst_file }}"
     dest: "{{ backup_dst_file_latest }}"
     state: link
-  connection: local
+  delegate_to: localhost
   
 - name: Delete backup file
   file:
