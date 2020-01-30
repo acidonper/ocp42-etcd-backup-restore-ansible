@@ -11,3 +11,4 @@ ansible_ssh_user=core
 ansible_ssh_private_key_file=/etc/ocp/4.2.2/openshift_rsa
 ansible_python_interpreter=/usr/libexec/platform-python
 http_proxy=http://proxyaplic02.eci.geci:8080
+https_proxy=http://proxyaplic02.eci.geci:8080
