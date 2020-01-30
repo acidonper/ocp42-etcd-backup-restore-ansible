@@ -33,7 +33,7 @@ Including an example of how to use your role (for instance, with variables passe
 
     - hosts: masters
       roles:
-         - { role: ocp_etcd_backup, backup_dst_path: /tmp/openshift42_backup }
+         - { role: ocp_etcd_backup, backup_dst_path: /tmp }
 
 License
 -------

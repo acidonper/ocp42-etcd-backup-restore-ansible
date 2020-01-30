@@ -40,7 +40,7 @@ Including an example of how to use your role (for instance, with variables passe
 
     - hosts: masters
       roles:
-         - { role: ocp_etcd_restore, backup_dst_path: /backups/etcd/20200109092851-snapshot.db }
+         - { role: ocp_etcd_restore, backup_dst_path: /backups/latest-snapshot.db }
 
 License
 -------

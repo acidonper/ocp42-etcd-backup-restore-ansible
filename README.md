@@ -2,7 +2,7 @@
 
 ETCD is the key-value store for OpenShift Container Platform, which persists the state of all resource objects.
 
-This repository implements a set of Ansible Playbooks in order to perform a backup and restore of the ETCD cluster data of an OpenShift Operational Cluster verison 4.2. Please, carefully review the contents in the following subsections in order to understand and be able to execute backup and restore procedures.
+This repository implements a set of Ansible Playbooks in order to perform a backup and restore of the ETCD cluster data of an OpenShift Operational Cluster version 4.2. Please, carefully review the contents in the following subsections in order to understand and be able to execute backup and restore procedures.
 
 ## ETCD cluster data Backup
 
@@ -14,6 +14,7 @@ On the other hand, You should only save a snapshot from a single master host. Yo
 
 -   Firstly, It is necessary to have an operational ETCD cluster with a quorum required and sanity checks passed.
 -   SSH access to a master host.
+-   Inventory file (**./inventory**) filled with OCP4.2 cluster settings
 
 ### Procedure Overview
 

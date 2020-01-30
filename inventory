@@ -1,14 +1,14 @@
 [masters]
 master1 ansible_host=192.168.130.11
-master2 ansible_host=192.168.130.11
-master3 ansible_host=192.168.130.11
+master2 ansible_host=192.168.130.12
+master3 ansible_host=192.168.130.13
 
 [localhost]
 localhost ansible_host=localhost ansible_connection=local ansible_python_interpreter=/usr/bin/python
 
 [masters:vars]
 ansible_ssh_user=core
-ansible_ssh_private_key_file=/etc/ocp/4.2.2/openshift_rsa
+ansible_ssh_private_key_file=/tmp/.crc_rsa
 ansible_python_interpreter=/usr/libexec/platform-python
-http_proxy=http://proxyaplic02.eci.geci:8080
-https_proxy=http://proxyaplic02.eci.geci:8080
+http_proxy=http://myproxy.example.com:8080
+https_proxy=http://myproxy.example.com:8080

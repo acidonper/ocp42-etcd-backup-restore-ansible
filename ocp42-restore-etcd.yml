@@ -1,7 +1,7 @@
 ##
 # Example: 
 # $ ansible-playbook -i inventory ocp42-restore-etcd.yml
-# $ ansible-playbook -i inventory ocp42-restore-etcd.yml --extra-vars="backup_src_file=/backups/etcd/20200109092851-snapshot.db"
+# $ ansible-playbook -i inventory ocp42-restore-etcd.yml --extra-vars="backup_src_file=/tmp/latest-snapshot.db"
 ##
 
 - hosts: masters
@@ -15,6 +15,6 @@
       import_role: 
         name: ocp_etcd_restore
       vars:
-        backup_src_file: "/tmp/ocp42-crc/latest-snapshot.db"
+        backup_src_file: "/tmp/latest-snapshot.db"
 
 

@@ -1,7 +1,7 @@
 ##
 # Example: 
 # $ ansible-playbook -i inventory ocp42-backup-etcd.yml
-# $ ansible-playbook -i inventory ocp42-backup-etcd.yml --extra-vars="backup_dst_path=/tmp/openshift42_backup"
+# $ ansible-playbook -i inventory ocp42-backup-etcd.yml --extra-vars="backup_dst_path=/tmp"
 ##
 
 - hosts: masters
@@ -15,5 +15,5 @@
       import_role: 
         name: ocp_etcd_backup
       vars:
-        backup_dst_path: "/tmp/ocp42-crc"
+        backup_dst_path: "/tmp"
       run_once: true
