@@ -4,11 +4,11 @@ master2 ansible_host=192.168.130.12
 master3 ansible_host=192.168.130.13
 
 [localhost]
-localhost ansible_host=localhost ansible_connection=local ansible_python_interpreter=/usr/bin/python
+localhost ansible_host=localhost ansible_connection=local ansible_python_interpreter=/usr/bin/python3
 
 [masters:vars]
 ansible_ssh_user=core
-ansible_ssh_private_key_file=/tmp/.crc_rsa
+ansible_ssh_private_key_file=~/.crc/machines/crc/id_rsa
 ansible_python_interpreter=/usr/libexec/platform-python
-http_proxy=http://myproxy.example.com:8080
-https_proxy=http://myproxy.example.com:8080
+http_proxy=""
+https_proxy=""
