@@ -6,6 +6,9 @@
 
 - hosts: masters
   gather_facts: false
+  environment:
+    http_proxy: "{{ http_proxy }}"
+    https_proxy: "{{ https_proxy }}"
   tasks:
 
     - name: Perform ETCD Backup

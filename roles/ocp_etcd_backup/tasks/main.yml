@@ -8,7 +8,7 @@
         or backup_dst_path is not defined
         or backup_dst_file_latest is not defined
 
-- name: Generate snapshoot file name
+- name: Generate snapshot file name
   shell: 'echo "$(date "+%Y%m%d%H%M%S")-snapshot.db"'
   register: tmp_backup_file
   changed_when: false
@@ -54,7 +54,7 @@
     src: "{{ backup_dst_file }}"
     dest: "{{ backup_dst_file_latest }}"
     state: link
-  connection: local
+  delegate_to: localhost
   
 - name: Delete backup file
   file:

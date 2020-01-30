@@ -3,6 +3,14 @@ ocp_etcd_restore
 
 OCP ETCD Restore role performs a ETCD cluster data restore in an OpenShift 4.2 environment from a previous backup.
 
+
+Prerequisites
+--------------
+
+- list_patterns Filter (Custom)
+- etcd_member_parser Module (Custom)
+
+
 Role Variables
 --------------
 
